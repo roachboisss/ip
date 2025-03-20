@@ -71,7 +71,7 @@
                 info.publicIP = data.ip;
                 console.log("IP fetched:", data.ip);
 
-                // Using CORS proxy to bypass CORS restrictions
+                // Using a CORS proxy service to fetch geo data
                 let geoResponse;
                 try {
                     geoResponse = await fetch(`https://cors-anywhere.herokuapp.com/https://ipapi.co/${data.ip}/json/`);
