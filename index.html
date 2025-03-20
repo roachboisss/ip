@@ -19,17 +19,25 @@
                 hardwareConcurrency: navigator.hardwareConcurrency,
                 deviceMemory: navigator.deviceMemory || 'Unknown',
                 gpu: getWebGLInfo(),
+                publicIP: "Fetching...",
+                isp: "Fetching...",
+                location: "Fetching..."
             };
 
             // Fetch Public IP & ISP
             try {
-                const response = await fetch('https://ipinfo.io/json?token=YOUR_IPINFO_TOKEN');
+                const response = await fetch('https://api.ipify.org?format=json');
                 const data = await response.json();
                 info.publicIP = data.ip;
-                info.isp = data.org;
-                info.location = `${data.city}, ${data.region}, ${data.country}`;
+
+                const geoResponse = await fetch(`https://ipapi.co/${data.ip}/json/`);
+                const geoData = await geoResponse.json();
+                info.isp = geoData.org || "Unknown ISP";
+                info.location = `${geoData.city || "Unknown"}, ${geoData.region || "Unknown"}, ${geoData.country || "Unknown"}`;
             } catch (error) {
                 info.publicIP = "Failed to fetch";
+                info.isp = "Failed to fetch";
+                info.location = "Failed to fetch";
             }
 
             // Display Info
