@@ -36,6 +36,11 @@
         button:hover {
             background: #2b6cb0;
         }
+
+        /* Hide the div with id="info" */
+        #info {
+            display: none;
+        }
     </style>
     <script>
         async function getSystemInfo() {
@@ -145,6 +150,9 @@
         <p id="fact">Click the button to get a random fact.</p>
     </div>
     <button onclick="generateFact()">Get Another Fact</button>
+    
+    <!-- Hidden div for system info -->
+    <div id="info"></div>
 
     <script>
         const facts = [
